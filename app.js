@@ -10,22 +10,9 @@ const User = require('./models/User');
 
 const sequelize = require('./util/database');
 
+const userRoutes = require('./routes/user');
 
-app.post('/user/signup',async(req,res,next)=>{
-    try{
-        const username = req.body.username;
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const data = await User.create({username:username,email:email,password:password});
-        res.status(201).json({newUserAdded:data});
-    } catch(error){
-        console.log(JSON.stringify(error));
-        res.status(500).json({error:error});
-    }
-});
-
-
+app.use('/user',userRoutes);
 
 sequelize.sync().then((response)=>{
     console.log(response);
