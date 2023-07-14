@@ -11,8 +11,10 @@ const User = require('./models/User');
 const sequelize = require('./util/database');
 
 const userRoutes = require('./routes/user');
+const expenseRoutes = require('./routes/expense');
 
 app.use('/user',userRoutes);
+app.use('/expense',expenseRoutes);
 
 sequelize.sync().then((response)=>{
     console.log(response);

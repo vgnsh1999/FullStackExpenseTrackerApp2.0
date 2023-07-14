@@ -32,6 +32,7 @@
             }
             const response = await axios.post('http://localhost:5000/user/login',obj);
             window.alert('User logged in successfully');
+            window.location.href = "./expense.html";
         } catch(error){
             console.log(error);
             document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
