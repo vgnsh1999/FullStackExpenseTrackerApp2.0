@@ -1,6 +1,7 @@
 const e = require('cors');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 function isstringinvalid(string){
     if(string === undefined || string.length ===0){
@@ -29,6 +30,10 @@ const signup = async(req,res,next)=>{
     }
 };
 
+function generateAccessToken(id,username){
+    return jwt.sign({userID:id,username:username},'secretkey');
+}
+
 const login = async(req,res,next)=>{
     try{
         const {email,password} = req.body;
@@ -40,7 +45,7 @@ const login = async(req,res,next)=>{
                     throw new Error('Something went wrong!');
                 }
                 if(result === true){
-                    res.status(200).json({success:true,message:'User logged in successfully'});
+                    res.status(200).json({success:true,message:'User logged in successfully',token:generateAccessToken(user[0].id,user[0].username)});
                 } else {
                     return res.status(400).json({success:false,message:'Password is incorrect'});
                 }
