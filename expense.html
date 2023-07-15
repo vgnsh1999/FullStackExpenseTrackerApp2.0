@@ -42,7 +42,8 @@
                 description:event.target.description.value,
                 category:event.target.category.value
             }
-            const response = await axios.post('http://localhost:5000/expense/add-expense',obj);
+            const token = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:5000/expense/add-expense', obj, {headers:{"Authorization":token}});
             showExpenseOnScreen(response.data.newExpenseAdded);
         } catch(error){
             console.log(error);
@@ -60,7 +61,8 @@
 
         async function deleteExpense(expenseID){
             try{
-                await axios.delete(`http://localhost:5000/expense/delete-expense/${expenseID}`);
+                const token = localStorage.getItem('token');
+                await axios.delete(`http://localhost:5000/expense/delete-expense/${expenseID}`,{headers:{"Authorization":token}});
                 removeExpenseFromScreen(expenseID);
             } catch(error){
                 console.log(error);

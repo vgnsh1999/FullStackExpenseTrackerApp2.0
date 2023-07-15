@@ -5,10 +5,10 @@ const router = express.Router();
 
 const expenseController = require('../controllers/expensecontrollers');
 
-router.post('/add-expense',expenseController.addExpense);
+router.post('/add-expense', userauthentication.authenticate, expenseController.addExpense);
 
 router.get('/get-expense', userauthentication.authenticate, expenseController.getExpense);
 
-router.delete('/delete-expense/:id',expenseController.deleteExpense);
+router.delete('/delete-expense/:id', userauthentication.authenticate, expenseController.deleteExpense);
 
 module.exports = router;
