@@ -29,8 +29,8 @@ const signup = async(req,res,next)=>{
     }
 };
 
-const generateAccessToken = (id,username) =>{
-    return jwt.sign({userId:id,username:username},'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
+const generateAccessToken = (id,username,ispremiumuser) =>{
+    return jwt.sign({userId:id,username:username,ispremiumuser},'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
 }
 
 const login = async(req,res,next)=>{
@@ -47,7 +47,7 @@ const login = async(req,res,next)=>{
                     throw new Error('Something went wrong!');
                 }
                 if(result === true){
-                    res.status(200).json({message:'User logged in successfully',success:true,token:generateAccessToken(user[0].id,user[0].username)});
+                    res.status(200).json({message:'User logged in successfully',success:true,token:generateAccessToken(user[0].id,user[0].username,user[0].ispremiumuser)});
                 } else {
                     return res.status(400).json({message:'Password is incorrect',success:false});
                 }
