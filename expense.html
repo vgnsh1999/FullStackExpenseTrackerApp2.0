@@ -162,7 +162,7 @@
             for(var i=0;i<userLeaderBoardArray.data.length;i++){
                 console.log(userLeaderBoardArray.data[i]);
                 var leaderBoardElements = document.getElementById('leaderBoardElements');
-                const childElement = `<li>Name - ${userLeaderBoardArray.data[i].username} - Total Expense - ${userLeaderBoardArray.data[i].total_cost}</li>`
+                const childElement = `<li>Name - ${userLeaderBoardArray.data[i].username} - Total Expense - ${userLeaderBoardArray.data[i].totalExpense}</li>`
                 leaderBoardElements.innerHTML = leaderBoardElements.innerHTML + childElement;
             }
 
