@@ -8,22 +8,16 @@
 </head>
 <body>
 <div class="container min-vh-100 d-flex justify-content-center align-items-center">
-  <form onsubmit="login(event)">
+  <form onsubmit="submit(event)">
   <div class="form-group">
     <label for="email">Enter your email:</label>
     <input type="text" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
   </div>
-  <div class="form-group">
-    <label for="password">Enter your password:</label>
-    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
-  </div>
-  <input type="submit" class="btn btn-primary" value="Login"> <br> <br>
-  <input type="button" class="btn btn-primary" value="Forgot Password?" id="forgot"> <br> <br>
-  <a href="./signup.html">New User? - Sign Up</a>
+  <input type="submit" class="btn btn-primary" value="Submit"> <br> <br>
  </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
-<script src="./login.js"></script>
+<script src="./forgot.js"></script>
 
 </body>
 </html>

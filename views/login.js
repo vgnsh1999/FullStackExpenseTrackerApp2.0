@@ -15,3 +15,12 @@ async function login(event){
         document.body.innerHTML = document.body.innerHTML + `<div style="color:red">${error.message}</div>`
     }
 }
+
+document.getElementById('forgot').onclick = async ()=>{
+    try{
+        window.location.href = "./forgot.html"
+    }catch(error){
+        console.log(error);
+        document.body.innerHTML = document.body.innerHTML + `<div style="color:red">${error.message}</div>`
+    }
+}
