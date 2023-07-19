@@ -17,6 +17,7 @@ async function addExpense(event){
     function showExpenseOnScreen(obj){
         const parentElement = document.getElementById('expenseTable');
         const childElement = `<tr id=${obj.id}><td>${obj.amount}</td><td>${obj.description}</td><td>${obj.category}</td>
+            <td></td>
             <td><button class="btn btn-primary" onclick="editExpense('${obj.id}','${obj.amount}','${obj.description}','${obj.category}')">Edit Expense
                 <button class="btn btn-danger" onclick="deleteExpense(${obj.id})">Delete Expense
             </td></tr>`
@@ -118,14 +119,19 @@ async function addExpense(event){
             try{
                 const token = localStorage.getItem('token');
                 const response = await axios.get('http://localhost:5000/user/download',{headers:{"Authorization":token}});
-                if(response.status === 201){
+                if(response.status === 200){
                     var a = document.createElement('a');
                     a.href = response.data.fileUrl;
                     a.download = 'myexpense.cv';
                     a.click();
+                    const date = new Date();
+                        const parentElement = document.getElementById('downloadedFiles');
+                        const childElement = `<li>${response.data.fileUrl} - Dowloaded</li>`
+                        parentElement.innerHTML = parentElement.innerHTML + childElement; 
                 } else{
                     throw new Error(response.data.message);
                 }
+                
             } catch(error){
                 console.log(error);
                 document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>';
@@ -158,6 +164,20 @@ async function addExpense(event){
                 showLeaderBoard();
                 download();
             }
+        } catch(error){
+            console.log(error);
+            //document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
+        }
+    });
+
+    window.addEventListener("DOMContentLoaded",async ()=>{
+        try{
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:5000/user/download',{headers:{"Authorization":token}});
+            console.log(response.data.fileUrls.fileUrl)
+                const parentElement = document.getElementById('downloadedFiles');
+                const childElement = `<li>${response.data.fileUrls.fileUrl} - Dowloaded</li>`
+                parentElement.innerHTML = parentElement.innerHTML + childElement; 
         } catch(error){
             console.log(error);
             //document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
