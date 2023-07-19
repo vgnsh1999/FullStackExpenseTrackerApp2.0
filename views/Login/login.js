@@ -8,7 +8,7 @@ async function login(event){
         const response = await axios.post('http://localhost:5000/user/login',obj);
         alert(response.data.message);
         localStorage.setItem('token',response.data.token);
-        window.location.href = "./expense.html";
+        window.location.href = "../Expense/expense.html";
     } catch(error){
         console.log(JSON.stringify(error));
         //document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>';
@@ -18,7 +18,7 @@ async function login(event){
 
 document.getElementById('forgot').onclick = async ()=>{
     try{
-        window.location.href = "./forgot.html"
+        window.location.href = "../Forgot/forgot.html"
     }catch(error){
         console.log(error);
         document.body.innerHTML = document.body.innerHTML + `<div style="color:red">${error.message}</div>`

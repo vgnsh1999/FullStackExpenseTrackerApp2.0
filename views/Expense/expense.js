@@ -60,6 +60,7 @@ async function addExpense(event){
                 alert('You are a Premium User now');
                 removePremiumButton();
                 showLeaderBoard();
+                download();
             },
         };
     const rzp1 = new Razorpay(options);
@@ -67,40 +68,69 @@ async function addExpense(event){
     e.preventDefault();
 
     rzp1.on('payment.failed', async function (response){
-        console.log(response);
-        const token = localStorage.getItem('token');
-        await axios.post('http://localhost:5000/purchase/updatetransactionstatus-fail',{
-                    order_id:options.order_id,
-                    payment_id:response.razorpay_payment_id
-                },{headers:{"Authorization":token}});
-        alert('Something went wrong');
+        try{
+            console.log(response);
+            const token = localStorage.getItem('token');
+            await axios.post('http://localhost:5000/purchase/updatetransactionstatus-fail',{
+                        order_id:options.order_id,
+                        payment_id:response.razorpay_payment_id
+                    },{headers:{"Authorization":token}});
+            alert('Something went wrong');
+        } catch(error){
+            console.log(error);
+            document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>';
+        }
     });
     }
 
     function removePremiumButton(){
             document.getElementById('rzp-button1').remove();
-            document.getElementById('message').innerHTML = `You are a premium user <button id="leaderboard" class="btn btn-primary">Show leadership</button>`;
+            document.getElementById('message').innerHTML = `You are a premium user <button id="leaderboard" class="btn btn-primary">Show leaderboard</button><button id="report" class="btn btn-secondary">Expense Report</button>`;
             // document.getElementById('rzp-button1').style.visibility = "hidden";
             // document.getElementById('message').innerHTML = 'You are a premium user';
-
     }
 
     function showLeaderBoard(){
         document.getElementById('leaderboard').onclick = async () => {
-        const token = localStorage.getItem('token');
-        const userLeaderBoardArray = await axios.get('http://localhost:5000/premium/showLeaderBoard',{headers:{"Authorization":token}});
-        console.log(userLeaderBoardArray);
-
-        var leaderBoardElements = document.getElementById('leaderBoardElements');
-        leaderBoardElements.innerHTML = leaderBoardElements.innerHTML + '<h1>Leaderboard</h1>'
-
-        for(var i=0;i<userLeaderBoardArray.data.length;i++){
-            console.log(userLeaderBoardArray.data[i]);
-            var leaderBoardElements = document.getElementById('leaderBoardElements');
-            const childElement = `<li>Name - ${userLeaderBoardArray.data[i].username} - Total Expense - ${userLeaderBoardArray.data[i].totalExpense}</li>`
-            leaderBoardElements.innerHTML = leaderBoardElements.innerHTML + childElement;
-        }
+            try{
+                const token = localStorage.getItem('token');
+                const userLeaderBoardArray = await axios.get('http://localhost:5000/premium/showLeaderBoard',{headers:{"Authorization":token}});
+                console.log(userLeaderBoardArray);
+        
+                var leaderBoardElements = document.getElementById('leaderBoardElements');
+                leaderBoardElements.innerHTML = leaderBoardElements.innerHTML + '<h1>Leaderboard</h1>'
+        
+                for(var i=0;i<userLeaderBoardArray.data.length;i++){
+                    console.log(userLeaderBoardArray.data[i]);
+                    var leaderBoardElements = document.getElementById('leaderBoardElements');
+                    const childElement = `<li>Name - ${userLeaderBoardArray.data[i].username} - Total Expense - ${userLeaderBoardArray.data[i].totalExpense}</li>`
+                    leaderBoardElements.innerHTML = leaderBoardElements.innerHTML + childElement;
+                }
+            } catch(error){
+                console.log(error);
+                document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>';
+            }
     }
+    }
+
+    function download(){
+        document.getElementById('report').onclick = async () =>{
+            try{
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:5000/user/download',{headers:{"Authorization":token}});
+                if(response.status === 201){
+                    var a = document.createElement('a');
+                    a.href = response.data.fileUrl;
+                    a.download = 'myexpense.cv';
+                    a.click();
+                } else{
+                    throw new Error(response.data.message);
+                }
+            } catch(error){
+                console.log(error);
+                document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>';
+            }
+        }
     }
 
     window.addEventListener("DOMContentLoaded",async ()=>{
@@ -126,6 +156,7 @@ async function addExpense(event){
             if(response.data.allStatus.status === 'SUCCESSFUL'){
                 removePremiumButton();
                 showLeaderBoard();
+                download();
             }
         } catch(error){
             console.log(error);
