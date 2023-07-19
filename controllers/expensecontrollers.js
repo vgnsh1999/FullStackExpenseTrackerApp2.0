@@ -86,9 +86,9 @@ const downloadexpense = async (req,res,next) =>{
 };
 
 function uploadToS3(data,filename){
-    const BUCKET_NAME = 'expensetrackerapp22';
-    const IAM_USER_KEY = 'AKIAQHPVBWE5H2HXAYDG';
-    const IAM_USER_SECRET = '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';
+    // const BUCKET_NAME = 'expensetrackerapp22';
+    // const IAM_USER_KEY = 'AKIAQHPVBWE5H2HXAYDG';
+    // const IAM_USER_SECRET = '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';
 
     let s3bucket = new AWS.S3({
         accessKeyId: IAM_USER_KEY,
