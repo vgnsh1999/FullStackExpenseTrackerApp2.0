@@ -1,8 +1,20 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const morgan = require('morgan');
+require('dotenv').config();
+
+const accessLogStream = fs.createWriteStream(
+    path.join(__dirname,'access.log'),
+    {flags:'a'}
+    );
 
 const cors = require('cors');
 const app = express();
+app.use(helmet());
+app.use(morgan('combined',{stream:accessLogStream}));
 app.use(cors());
 app.use(bodyParser.json({extended:false}));
 
@@ -37,5 +49,5 @@ Forgotpassword.belongsTo(User);
 
 sequelize.sync().then((response)=>{
     console.log(response);
-    app.listen(5000);
+    app.listen(process.env.PORT||5000);
 }).catch(error=>console.log(error));

@@ -39,6 +39,16 @@ const getExpense = async (req,res,next)=>{
     }
 };
 
+// const getExpenseOnPage1 = async (req,res,next)=>{
+//     try{
+//         const expenses = await Expense.findAll({ limit: 10, where: { userId:req.user.id }});
+//         res.status(200).json({allExpenses:expenses,success:true});
+//     } catch(error){
+//         console.log(JSON.stringify(error));
+//         res.status(500).json({message:error,success:false});
+//     }
+// };
+
 const deleteExpense = async (req,res,next)=>{
     const t = await sequelize.transaction();
     try{
@@ -76,8 +86,8 @@ const downloadexpense = async (req,res,next) =>{
         const userId = req.user.id;
         const filename = `Expense${userId}/${new Date()}.txt`;
         const fileUrl = await uploadToS3(stringifiedExpenses,filename);
-        const data = await FileUrl.create({fileUrl:fileUrl});
-        res.status(200).json({fileUrl:fileUrl,fileUrls:data,success:true})
+        const data = await FileUrl.create({userId:req.user.id,fileUrl:fileUrl});
+        res.status(200).json({fileUrl:fileUrl,success:true});
 
     } catch(error){
         console.log(error);
@@ -85,8 +95,18 @@ const downloadexpense = async (req,res,next) =>{
     }
 };
 
+const download = async (req,res,next)=>{
+    try{
+        const fileUrls = await FileUrl.findAll({where:{userId:req.user.id}});
+        res.status(200).json({allFiles:fileUrls,success:true});
+    } catch(error){
+        console.log(JSON.stringify(error));
+        res.status(500).json({message:error,success:false});
+    }
+};
+
 function uploadToS3(data,filename){
-    const BUCKET_NAME = 'expensetrackerapp22';
+    const BUCKET_NAME = process.env.BUCKET_NAME;
     const IAM_USER_KEY = process.env.IAM_USER_KEY;
     const IAM_USER_SECRET = process.env.IAM_USER_SECRET;
 
@@ -118,5 +138,7 @@ module.exports = {
     addExpense,
     getExpense,
     deleteExpense,
-    downloadexpense
+    downloadexpense,
+    download,
+    //getExpenseOnPage1
 };

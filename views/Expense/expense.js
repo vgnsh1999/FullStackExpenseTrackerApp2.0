@@ -17,11 +17,16 @@ async function addExpense(event){
     function showExpenseOnScreen(obj){
         const parentElement = document.getElementById('expenseTable');
         const childElement = `<tr id=${obj.id}><td>${obj.amount}</td><td>${obj.description}</td><td>${obj.category}</td>
-            <td></td>
             <td><button class="btn btn-primary" onclick="editExpense('${obj.id}','${obj.amount}','${obj.description}','${obj.category}')">Edit Expense
                 <button class="btn btn-danger" onclick="deleteExpense(${obj.id})">Delete Expense
             </td></tr>`
         parentElement.innerHTML = parentElement.innerHTML + childElement;        
+    }
+
+    function showDownloadOnScreen(obj){
+        const parentElement = document.getElementById('downloadedFiles');
+        const childElement = `<li><a href=${obj.fileUrl}>${obj.fileUrl}</a> - Dowloaded on ${obj.createdAt}</li>`
+        parentElement.innerHTML = parentElement.innerHTML + childElement; 
     }
 
     async function deleteExpense(expenseID){
@@ -124,9 +129,8 @@ async function addExpense(event){
                     a.href = response.data.fileUrl;
                     a.download = 'myexpense.cv';
                     a.click();
-                    const date = new Date();
                         const parentElement = document.getElementById('downloadedFiles');
-                        const childElement = `<li>${response.data.fileUrl} - Dowloaded</li>`
+                        const childElement = `<li><a href=${response.data.fileUrl}>${response.data.fileUrl}</a> - Dowloaded on ${new Date()}</li>`
                         parentElement.innerHTML = parentElement.innerHTML + childElement; 
                 } else{
                     throw new Error(response.data.message);
@@ -152,6 +156,7 @@ async function addExpense(event){
         }
     });
 
+
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
             const token = localStorage.getItem('token');
@@ -173,13 +178,35 @@ async function addExpense(event){
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/user/download',{headers:{"Authorization":token}});
-            console.log(response.data.fileUrls.fileUrl)
-                const parentElement = document.getElementById('downloadedFiles');
-                const childElement = `<li>${response.data.fileUrls.fileUrl} - Dowloaded</li>`
-                parentElement.innerHTML = parentElement.innerHTML + childElement; 
+            const response = await axios.get('http://localhost:5000/expense/download',{headers:{"Authorization":token}});
+            console.log(response.data.allFiles)
+            for(var i=0;i<response.data.allFiles.length;i++){
+                showDownloadOnScreen(response.data.allFiles[i]);
+            }
+                
         } catch(error){
             console.log(error);
             //document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
         }
     });
+
+    // window.addEventListener("DOMContentLoaded",async()=>{
+    //     try{
+    //         document.getElementById('page1').onclick = async()=>{
+    //             try{
+    //                 const token = localStorage.getItem('token');
+    //                 const page = 1;
+    //                 const limit = 10;
+    //                 const response = await axios.get(`http://localhost:5000/expense/get-expense?page=${page}&limit=${limit}`,{headers:{"Authorization":token}});
+    //                 for(var i=0;i<response.data.allExpenses.length;i++){
+    //                     showExpenseOnScreen(response.data.allExpenses[i]);
+    //                 }
+    //             } catch(error){
+    //                 throw new Error(error);
+    //             }
+    //         }
+    //     } catch(error){
+    //         console.log(error);
+    //         document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
+    //     }
+    // });

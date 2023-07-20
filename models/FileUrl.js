@@ -9,7 +9,11 @@ const FileUrl = sequelize.define('fileurl',{
         allowNull:false,
         primaryKey:true
     },
+    userId:{
+        type:Sequelize.INTEGER
+    },
     fileUrl:Sequelize.STRING,
+    date:Sequelize.DATE
 });
 
 module.exports = FileUrl;
