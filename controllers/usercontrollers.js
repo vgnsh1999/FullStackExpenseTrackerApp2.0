@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Expense = require('../models/Expense');
 require('dotenv').config();
 
 function isstringinvalid(string){
@@ -62,8 +63,19 @@ const login = async(req,res,next)=>{
     }
 };
 
+const totalexpense = async (req,res,next)=>{
+    try{
+        const totalExpense = await User.findAll({where:{id:req.user.id}});
+        res.status(200).json({totalExpense:totalExpense,success:false});
+    } catch(error){
+        console.log(JSON.stringify(error));
+        res.status(500).json({message:error,success:false});
+    }
+};
+
 module.exports = {
     signup,
     login,
-    generateAccessToken
+    generateAccessToken,
+    totalexpense
 };

@@ -44,15 +44,24 @@
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </div>
     <h2>Expense Table</h2>
+    <h3>Total Expense:</h3>
+    <div id="totalExpense"></div>
+    <h3>Size:</h3>
+    <!-- <select name="size" id="size">
+        <option value="5">5</option>
+        <option value="10">10</option>
+    </select> -->
     <table id="expenseTable" class="table table-striped table-bordered table-sm">
     <tr>
         <th>Amount</th>
         <th>Description</th>
         <th>Category</th>
-        <th>Functionality</th>
+        <th>Edit/Delete Expenses</th>
     </tr>
     </table>
+    <div id="pageButton" class="container"><button class="btn">1</button></div>
     <ul id="leaderBoardElements"></ul>
+    <h3>Previously downloaded reports</h3>
     <ul id="downloadedFiles"></ul>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.js"></script>
     <script src="./expense.js"></script>

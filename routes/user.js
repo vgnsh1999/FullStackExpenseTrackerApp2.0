@@ -13,6 +13,8 @@ router.post('/login',userController.login);
 
 router.get('/download',authenthicatemiddleware.authenticate,expenseController.downloadexpense);
 
+router.get('/total-expense',authenthicatemiddleware.authenticate,userController.totalexpense);
+
 module.exports = router;
 
 

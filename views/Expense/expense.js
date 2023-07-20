@@ -29,6 +29,12 @@ async function addExpense(event){
         parentElement.innerHTML = parentElement.innerHTML + childElement; 
     }
 
+    function showTotalExpenseOnScreen(obj){
+        const parentElement = document.getElementById('totalExpense');
+        const childElement = `<h3>Rs.${obj.totalExpense}</h3>`
+        parentElement.innerHTML = parentElement.innerHTML + childElement; 
+    }
+
     async function deleteExpense(expenseID){
         try{
             const token = localStorage.getItem('token');
@@ -143,8 +149,26 @@ async function addExpense(event){
         }
     }
 
+    function pageFunction2(){
+        const parentElement = document.getElementById('pageButton');
+        parentElement.innerHTML += `<button class="btn" id="page2">2</button>`;
+        document.getElementById('page2').onclick = async ()=>{
+            try{
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:5000/expense/get-expense/page2',{headers:{"Authorization":token}});
+                for(var i=0;i<response.data.allExpenses.length;i++){
+                    showExpenseOnScreen(response.data.allExpenses[i]);
+                } 
+            } catch(error){
+                console.log(error);
+                document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>';
+            }
+        }
+    }
+
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
+            pageFunction2();
             const token = localStorage.getItem('token');
             const response = await axios.get('http://localhost:5000/expense/get-expense',{headers:{"Authorization":token}});
             for(var i=0;i<response.data.allExpenses.length;i++){
@@ -155,7 +179,6 @@ async function addExpense(event){
             document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
         }
     });
-
 
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
@@ -188,25 +211,15 @@ async function addExpense(event){
             console.log(error);
             //document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
         }
-    });
+    });    
 
-    // window.addEventListener("DOMContentLoaded",async()=>{
-    //     try{
-    //         document.getElementById('page1').onclick = async()=>{
-    //             try{
-    //                 const token = localStorage.getItem('token');
-    //                 const page = 1;
-    //                 const limit = 10;
-    //                 const response = await axios.get(`http://localhost:5000/expense/get-expense?page=${page}&limit=${limit}`,{headers:{"Authorization":token}});
-    //                 for(var i=0;i<response.data.allExpenses.length;i++){
-    //                     showExpenseOnScreen(response.data.allExpenses[i]);
-    //                 }
-    //             } catch(error){
-    //                 throw new Error(error);
-    //             }
-    //         }
-    //     } catch(error){
-    //         console.log(error);
-    //         document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
-    //     }
-    // });
+    window.addEventListener("DOMContentLoaded",async ()=>{
+        try{
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:5000/user/total-expense',{headers:{"Authorization":token}});
+            showTotalExpenseOnScreen(response.data.totalExpense[0]);
+        } catch(error){
+            console.log(error);
+            document.body.innerHTML = document.body.innerHTML + '<h4>Something went wrong!</h4>'
+        }
+    });

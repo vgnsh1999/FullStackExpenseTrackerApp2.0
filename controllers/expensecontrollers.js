@@ -31,7 +31,7 @@ const addExpense = async (req,res,next)=>{
 
 const getExpense = async (req,res,next)=>{
     try{
-        const expenses = await Expense.findAll({ where: { userId:req.user.id }});
+        const expenses = await Expense.findAll({limit: 5, where: { userId:req.user.id }});
         res.status(200).json({allExpenses:expenses,success:true});
     } catch(error){
         console.log(JSON.stringify(error));
@@ -39,15 +39,16 @@ const getExpense = async (req,res,next)=>{
     }
 };
 
-// const getExpenseOnPage1 = async (req,res,next)=>{
-//     try{
-//         const expenses = await Expense.findAll({ limit: 10, where: { userId:req.user.id }});
-//         res.status(200).json({allExpenses:expenses,success:true});
-//     } catch(error){
-//         console.log(JSON.stringify(error));
-//         res.status(500).json({message:error,success:false});
-//     }
-// };
+
+const getExpenseOnPage2 = async (req,res,next)=>{
+    try{
+        const expenses = await Expense.findAll({ limit: 5, offset:5 ,where: { userId:req.user.id }});
+        res.status(200).json({allExpenses:expenses,success:true});
+    } catch(error){
+        console.log(JSON.stringify(error));
+        res.status(500).json({message:error,success:false});
+    }
+};
 
 const deleteExpense = async (req,res,next)=>{
     const t = await sequelize.transaction();
@@ -140,5 +141,5 @@ module.exports = {
     deleteExpense,
     downloadexpense,
     download,
-    //getExpenseOnPage1
+    getExpenseOnPage2
 };
