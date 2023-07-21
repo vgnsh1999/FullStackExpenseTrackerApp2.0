@@ -31,7 +31,8 @@ const addExpense = async (req,res,next)=>{
 
 const getExpense = async (req,res,next)=>{
     try{
-        const expenses = await Expense.findAll({limit: 5, where: { userId:req.user.id }});
+        const limit = +req.query.limit;
+        const expenses = await Expense.findAll({limit: limit, where: { userId:req.user.id }});
         res.status(200).json({allExpenses:expenses,success:true});
     } catch(error){
         console.log(JSON.stringify(error));
@@ -42,7 +43,8 @@ const getExpense = async (req,res,next)=>{
 
 const getExpenseOnPage2 = async (req,res,next)=>{
     try{
-        const expenses = await Expense.findAll({ limit: 5, offset:5 ,where: { userId:req.user.id }});
+        const limit = +req.query.limit;
+        const expenses = await Expense.findAll({ limit: limit, offset:limit ,where: { userId:req.user.id }});
         res.status(200).json({allExpenses:expenses,success:true});
     } catch(error){
         console.log(JSON.stringify(error));

@@ -6,6 +6,10 @@ async function addExpense(event){
             description:event.target.description.value,
             category:event.target.category.value
         }
+        const obj1 = {
+            size:event.target.size.value
+        }
+        localStorage.setItem('size',obj1.size);
         const token = localStorage.getItem('token');
         const response = await axios.post('http://localhost:5000/expense/add-expense', obj, {headers:{"Authorization":token}});
         showExpenseOnScreen(response.data.newExpenseAdded);
@@ -155,7 +159,8 @@ async function addExpense(event){
         document.getElementById('page2').onclick = async ()=>{
             try{
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:5000/expense/get-expense/page2',{headers:{"Authorization":token}});
+                const limit = localStorage.getItem('limit');
+                const response = await axios.get(`http://localhost:5000/expense/get-expense/page2?limit=${limit}`,{headers:{"Authorization":token}});
                 for(var i=0;i<response.data.allExpenses.length;i++){
                     showExpenseOnScreen(response.data.allExpenses[i]);
                 } 
@@ -170,7 +175,8 @@ async function addExpense(event){
         try{
             pageFunction2();
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/expense/get-expense',{headers:{"Authorization":token}});
+            const limit = localStorage.getItem('limit');
+            const response = await axios.get(`http://localhost:5000/expense/get-expense?limit=${limit}`,{headers:{"Authorization":token}});
             for(var i=0;i<response.data.allExpenses.length;i++){
                 showExpenseOnScreen(response.data.allExpenses[i]);
             }
