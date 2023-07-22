@@ -11,7 +11,7 @@ async function addExpense(event){
         }
         localStorage.setItem('size',obj1.size);
         const token = localStorage.getItem('token');
-        const response = await axios.post('http://localhost:5000/expense/add-expense', obj, {headers:{"Authorization":token}});
+        const response = await axios.post('http://localhost:3000/expense/add-expense', obj, {headers:{"Authorization":token}});
         showExpenseOnScreen(response.data.newExpenseAdded);
     } catch(error){
         console.log(error);
@@ -42,7 +42,7 @@ async function addExpense(event){
     async function deleteExpense(expenseID){
         try{
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/expense/delete-expense/${expenseID}`,{headers:{"Authorization":token}});
+            await axios.delete(`http://localhost:3000/expense/delete-expense/${expenseID}`,{headers:{"Authorization":token}});
             removeExpenseFromScreen(expenseID);
         } catch(error){
             console.log(error);
@@ -63,13 +63,13 @@ async function addExpense(event){
 
     document.getElementById('rzp-button1').onclick = async function (e){
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/purchase/premiummembership',{headers:{"Authorization":token}});
+        const response = await axios.get('http://localhost:3000/purchase/premiummembership',{headers:{"Authorization":token}});
         console.log(response);
         var options = {
             "key": response.data.key_id,
             "order_id":response.data.order.id,
             "handler":async function (response){
-                    await axios.post('http://localhost:5000/purchase/updatetransactionstatus-success',{
+                    await axios.post('http://localhost:3000/purchase/updatetransactionstatus-success',{
                     order_id:options.order_id,
                     payment_id:response.razorpay_payment_id,
                 },{headers:{"Authorization":token}})
@@ -87,7 +87,7 @@ async function addExpense(event){
         try{
             console.log(response);
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:5000/purchase/updatetransactionstatus-fail',{
+            await axios.post('http://localhost:3000/purchase/updatetransactionstatus-fail',{
                         order_id:options.order_id,
                         payment_id:response.razorpay_payment_id
                     },{headers:{"Authorization":token}});
@@ -110,7 +110,7 @@ async function addExpense(event){
         document.getElementById('leaderboard').onclick = async () => {
             try{
                 const token = localStorage.getItem('token');
-                const userLeaderBoardArray = await axios.get('http://localhost:5000/premium/showLeaderBoard',{headers:{"Authorization":token}});
+                const userLeaderBoardArray = await axios.get('http://localhost:3000/premium/showLeaderBoard',{headers:{"Authorization":token}});
                 console.log(userLeaderBoardArray);
         
                 var leaderBoardElements = document.getElementById('leaderBoardElements');
@@ -133,7 +133,7 @@ async function addExpense(event){
         document.getElementById('report').onclick = async () =>{
             try{
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:5000/user/download',{headers:{"Authorization":token}});
+                const response = await axios.get('http://localhost:3000/user/download',{headers:{"Authorization":token}});
                 if(response.status === 200){
                     var a = document.createElement('a');
                     a.href = response.data.fileUrl;
@@ -160,7 +160,7 @@ async function addExpense(event){
             try{
                 const token = localStorage.getItem('token');
                 const limit = localStorage.getItem('limit');
-                const response = await axios.get(`http://localhost:5000/expense/get-expense/page2?limit=${limit}`,{headers:{"Authorization":token}});
+                const response = await axios.get(`http://localhost:3000/expense/get-expense/page2?limit=${limit}`,{headers:{"Authorization":token}});
                 for(var i=0;i<response.data.allExpenses.length;i++){
                     showExpenseOnScreen(response.data.allExpenses[i]);
                 } 
@@ -176,7 +176,7 @@ async function addExpense(event){
             pageFunction2();
             const token = localStorage.getItem('token');
             const limit = localStorage.getItem('limit');
-            const response = await axios.get(`http://localhost:5000/expense/get-expense?limit=${limit}`,{headers:{"Authorization":token}});
+            const response = await axios.get(`http://localhost:3000/expense/get-expense?limit=${limit}`,{headers:{"Authorization":token}});
             for(var i=0;i<response.data.allExpenses.length;i++){
                 showExpenseOnScreen(response.data.allExpenses[i]);
             }
@@ -189,7 +189,7 @@ async function addExpense(event){
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/purchase/getstatus',{headers:{"Authorization":token}});
+            const response = await axios.get('http://localhost:3000/purchase/getstatus',{headers:{"Authorization":token}});
             console.log(response);
             console.log(response.data.allStatus)
             console.log(response.data.allStatus.status)
@@ -207,7 +207,7 @@ async function addExpense(event){
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/expense/download',{headers:{"Authorization":token}});
+            const response = await axios.get('http://localhost:3000/expense/download',{headers:{"Authorization":token}});
             console.log(response.data.allFiles)
             for(var i=0;i<response.data.allFiles.length;i++){
                 showDownloadOnScreen(response.data.allFiles[i]);
@@ -222,7 +222,7 @@ async function addExpense(event){
     window.addEventListener("DOMContentLoaded",async ()=>{
         try{
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/user/total-expense',{headers:{"Authorization":token}});
+            const response = await axios.get('http://localhost:3000/user/total-expense',{headers:{"Authorization":token}});
             showTotalExpenseOnScreen(response.data.totalExpense[0]);
         } catch(error){
             console.log(error);

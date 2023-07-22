@@ -24,7 +24,7 @@ const forgotpassword = async (req, res) => {
                 from: 'vigneshvarathan@gmail.com', // Change to your verified sender
                 subject: 'Sending with SendGrid is Fun',
                 text: 'and easy to do anywhere, even with Node.js',
-                html: `<a href="http://localhost:5000/password/resetpassword/${id}">Reset password</a>`,
+                html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
             }
 
             sgMail

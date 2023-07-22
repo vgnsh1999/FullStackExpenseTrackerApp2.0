@@ -5,7 +5,7 @@ async function login(event){
             email:event.target.email.value,
             password:event.target.password.value
         }
-        const response = await axios.post('http://localhost:5000/user/login',obj);
+        const response = await axios.post('http://localhost:3000/user/login',obj);
         alert(response.data.message);
         localStorage.setItem('token',response.data.token);
         window.location.href = "../Expense/expense.html";
