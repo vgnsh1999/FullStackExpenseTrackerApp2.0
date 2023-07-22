@@ -6,7 +6,7 @@ async function signUp(event){
             email:event.target.email.value,
             password:event.target.password.value
         }
-        const response = await axios.post('http://localhost:3000/user/signup',obj);
+        const response = await axios.post('http://13.51.199.65:3000/user/signup',obj);
         if(response.status === 201){
           window.location.href = "../Login/login.html";
           localStorage.setItem('username',obj.username);
