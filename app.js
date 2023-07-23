@@ -4,6 +4,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const axios = require('axios');
 require('dotenv').config();
 
 const accessLogStream = fs.createWriteStream(
@@ -13,7 +14,7 @@ const accessLogStream = fs.createWriteStream(
 
 const cors = require('cors');
 const app = express();
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(morgan('combined',{stream:accessLogStream}));
 app.use(cors());
 app.use(bodyParser.json({extended:false}));
@@ -30,6 +31,7 @@ const expenseRoutes = require('./routes/expense');
 const purchaseRoutes = require('./routes/purchase');
 const premiumFeatureRoutes = require('./routes/premium');
 const forgotPasswordRoutes = require('./routes/forgot');
+
 
 app.use('/user',userRoutes);
 app.use('/expense',expenseRoutes);
